@@ -161,15 +161,19 @@ function App() {
   };
 
   const handleDeleteClick = () => {
-    const selectedRowIds = selectedRows.map((row) => row.id);
-    setData((prevData) =>
-      prevData.filter((item) => !selectedRowIds.includes(item.id))
-    );
-    setSelectedRows([]);
+    if (selectedRows != []) {
+      const selectedRowIds = selectedRows.map((row) => row.id);
+      setData((prevData) =>
+        prevData.filter((item) => !selectedRowIds.includes(item.id))
+      );
+      setSelectedRows([]);
+    }
   };
 
   const handleUpdateClick = () => {
-    setShowUpdateModal(true);
+    if (selectedRows != []) {
+      setShowUpdateModal(true);
+    }
   };
 
   const columns = [
@@ -196,10 +200,6 @@ function App() {
     {
       name: "YearOfBirth",
       selector: (row) => <div title={row.YearOfBirth}>{row.YearOfBirth}</div>,
-    },
-    {
-      name: "Address",
-      selector: (row) => <div title={row.Address}>{row.Address}</div>,
     },
     {
       name: "Street",
