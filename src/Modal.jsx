@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ModalStyles.css"; // Import the CSS file
+import "./ModalStyles.css";
 
 const Modal = ({ show, children, onClose }) => {
   if (!show) {

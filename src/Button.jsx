@@ -21,7 +21,7 @@ const Button = ({ onDeleteModeChange }) => {
   };
 
   return (
-    <div className="parrent">
+    <div className="parent">
       <button onClick={handleAddClick} className="my-button rounded-button">
         Thêm
       </button>
