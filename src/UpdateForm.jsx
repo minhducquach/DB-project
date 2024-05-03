@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const AddForm = () => {
+const UpdateForm = (selectedRow) => {
+  console.log("SELECTED ROW:", selectedRow.selectedRow.UserID);
   const [user, setUser] = useState({
     UserID: "",
     Gender: "",
@@ -12,6 +13,22 @@ const AddForm = () => {
     PhoneNumber: "",
     YearOfBirth: "",
   });
+
+  useEffect(() => {
+    if (selectedRow.selectedRow) {
+      setUser({
+        UserID: selectedRow.selectedRow.UserId,
+        Gender: selectedRow.selectedRow.Gender,
+        FullName: selectedRow.selectedRow.FullName,
+        Email: selectedRow.selectedRow.Email,
+        Street: selectedRow.selectedRow.Street,
+        City: selectedRow.selectedRow.City,
+        Province: selectedRow.selectedRow.Province,
+        PhoneNumber: selectedRow.selectedRow.PhoneNumber,
+        YearOfBirth: selectedRow.selectedRow.YearOfBirth,
+      });
+    }
+  }, [selectedRow]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -108,9 +125,10 @@ const AddForm = () => {
           ))}
         </select>
       </label>
+
       <input type="submit" value="Submit" />
     </form>
   );
 };
 
-export default AddForm;
+export default UpdateForm;

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import "./ButtonStyles.css";
-import Form from "./AddForm";
+import AddForm from "./AddForm";
 import Modal from "./Modal";
 
-const Button = ({ onDeleteModeChange }) => {
+const Button = ({ onDeleteModeChange, onUpdateModeChange }) => {
   const [showModal, setShowModal] = useState(false);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
 
   const handleAddClick = () => {
     setShowModal(true);
@@ -16,8 +17,21 @@ const Button = ({ onDeleteModeChange }) => {
   };
 
   const handleDeleteClick = () => {
+    if (isUpdateMode) {
+      setIsUpdateMode(!isUpdateMode);
+      onUpdateModeChange(!isUpdateMode);
+    }
     setIsDeleteMode(!isDeleteMode);
     onDeleteModeChange(!isDeleteMode);
+  };
+
+  const handleUpdateClick = () => {
+    if (isDeleteMode) {
+      setIsDeleteMode(!isDeleteMode);
+      onDeleteModeChange(!isDeleteMode);
+    }
+    setIsUpdateMode(!isUpdateMode);
+    onUpdateModeChange(!isUpdateMode);
   };
 
   return (
@@ -26,12 +40,14 @@ const Button = ({ onDeleteModeChange }) => {
         Thêm
       </button>
       <Modal show={showModal} onClose={handleAddClose}>
-        <Form />
+        <AddForm />
       </Modal>
       <button onClick={handleDeleteClick} className="my-button rounded-button">
         Xóa
       </button>
-      <button className="my-button rounded-button">Sửa</button>
+      <button onClick={handleUpdateClick} className="my-button rounded-button">
+        Sửa
+      </button>
       <button className="my-button rounded-button">Lọc</button>
     </div>
   );
