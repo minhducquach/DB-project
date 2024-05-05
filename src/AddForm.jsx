@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
-const AddForm = () => {
+const AddForm = ({ onUserInserted, closeModal }) => {
   const [user, setUser] = useState({
-    UserID: "",
     Gender: "",
     FullName: "",
     Email: "",
@@ -21,9 +20,26 @@ const AddForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
+    try {
+      const response = await fetch("http://localhost:3001/api/insertUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      const data = await response.json();
+      console.log("User inserted successfully:", data);
+      onUserInserted(Date.now());
+      closeModal(true);
+    } catch (error) {
+      console.error("An error occurred while inserting the user:", error);
+    }
   };
 
   return (
@@ -49,7 +65,7 @@ const AddForm = () => {
         Email:
         <input
           type="email"
-          name="email"
+          name="Email"
           value={user.Email}
           onChange={handleChange}
         />
@@ -58,7 +74,7 @@ const AddForm = () => {
         Street:
         <input
           type="text"
-          name="street"
+          name="Street"
           value={user.Street}
           onChange={handleChange}
         />
@@ -67,7 +83,7 @@ const AddForm = () => {
         City:
         <input
           type="text"
-          name="city"
+          name="City"
           value={user.City}
           onChange={handleChange}
         />
@@ -76,7 +92,7 @@ const AddForm = () => {
         Province:
         <input
           type="text"
-          name="province"
+          name="Province"
           value={user.Province}
           onChange={handleChange}
         />
@@ -85,7 +101,7 @@ const AddForm = () => {
         Phone Number:
         <input
           type="tel"
-          name="phone_number"
+          name="PhoneNumber"
           value={user.PhoneNumber}
           onChange={handleChange}
         />

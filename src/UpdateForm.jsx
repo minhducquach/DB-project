@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-const UpdateForm = (selectedRow) => {
-  console.log("SELECTED ROW:", selectedRow.selectedRow.UserID);
+const UpdateForm = ({ selectedRow, onUserUpdated, closeModal }) => {
+  console.log("SELECTED ROW:", selectedRow.UserID);
   const [user, setUser] = useState({
     UserID: "",
     Gender: "",
@@ -15,17 +15,17 @@ const UpdateForm = (selectedRow) => {
   });
 
   useEffect(() => {
-    if (selectedRow.selectedRow) {
+    if (selectedRow) {
       setUser({
-        UserID: selectedRow.selectedRow.UserId,
-        Gender: selectedRow.selectedRow.Gender,
-        FullName: selectedRow.selectedRow.FullName,
-        Email: selectedRow.selectedRow.Email,
-        Street: selectedRow.selectedRow.Street,
-        City: selectedRow.selectedRow.City,
-        Province: selectedRow.selectedRow.Province,
-        PhoneNumber: selectedRow.selectedRow.PhoneNumber,
-        YearOfBirth: selectedRow.selectedRow.YearOfBirth,
+        UserID: selectedRow.UserID,
+        Gender: selectedRow.Gender,
+        FullName: selectedRow.FullName,
+        Email: selectedRow.Email,
+        Street: selectedRow.Street,
+        City: selectedRow.City,
+        Province: selectedRow.Province,
+        PhoneNumber: selectedRow.PhoneNumber,
+        YearOfBirth: selectedRow.YearOfBirth,
       });
     }
   }, [selectedRow]);
@@ -38,13 +38,39 @@ const UpdateForm = (selectedRow) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
+    try {
+      const response = await fetch("http://localhost:3001/api/updateUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      const data = await response.json();
+      console.log("User updated successfully:", data);
+      onUserUpdated(Date.now());
+      closeModal(true);
+    } catch (error) {
+      console.error("An error occurred while updating the user:", error);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      <label>
+        UserID:
+        <input
+          type="number"
+          name="UserID"
+          value={user.UserID}
+          disabled={true}
+        />
+      </label>
       <label>
         Gender:
         <select name="Gender" value={user.Gender} onChange={handleChange}>
@@ -66,7 +92,7 @@ const UpdateForm = (selectedRow) => {
         Email:
         <input
           type="email"
-          name="email"
+          name="Email"
           value={user.Email}
           onChange={handleChange}
         />
@@ -75,7 +101,7 @@ const UpdateForm = (selectedRow) => {
         Street:
         <input
           type="text"
-          name="street"
+          name="Street"
           value={user.Street}
           onChange={handleChange}
         />
@@ -84,7 +110,7 @@ const UpdateForm = (selectedRow) => {
         City:
         <input
           type="text"
-          name="city"
+          name="City"
           value={user.City}
           onChange={handleChange}
         />
@@ -93,7 +119,7 @@ const UpdateForm = (selectedRow) => {
         Province:
         <input
           type="text"
-          name="province"
+          name="Province"
           value={user.Province}
           onChange={handleChange}
         />
@@ -102,7 +128,7 @@ const UpdateForm = (selectedRow) => {
         Phone Number:
         <input
           type="tel"
-          name="phone_number"
+          name="PhoneNumber"
           value={user.PhoneNumber}
           onChange={handleChange}
         />

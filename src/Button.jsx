@@ -3,7 +3,7 @@ import "./ButtonStyles.css";
 import AddForm from "./AddForm";
 import Modal from "./Modal";
 
-const Button = ({ onDeleteModeChange, onUpdateModeChange }) => {
+const Button = ({ onDeleteModeChange, onUpdateModeChange, onUserInserted }) => {
   const [showModal, setShowModal] = useState(false);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
@@ -40,7 +40,7 @@ const Button = ({ onDeleteModeChange, onUpdateModeChange }) => {
         Thêm
       </button>
       <Modal show={showModal} onClose={handleAddClose}>
-        <AddForm />
+        <AddForm onUserInserted={onUserInserted} closeModal={handleAddClose} />
       </Modal>
       <button onClick={handleDeleteClick} className="my-button rounded-button">
         Xóa
